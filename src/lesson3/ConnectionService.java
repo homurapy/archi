@@ -15,7 +15,7 @@ public final class ConnectionService {
             INSTANCE = new ConnectionService();
         return INSTANCE;
     }
-    
+
     public static Connection connectSQLite() {
         try {
             return DriverManager.getConnection("jdbc:sqlite:server/database.db");
