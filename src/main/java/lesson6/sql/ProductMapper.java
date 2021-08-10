@@ -27,13 +27,15 @@ public class ProductMapper {
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
+            } finally {
+                ConnectionService.close(connection);
             }
             return product;
         }
     }
 
     public boolean save(Product product) {
-        try (PreparedStatement statement = connection.prepareStatement("INSERT INTO products (name, price) VALUES (?, ?)")) {
+        try(PreparedStatement statement = connection.prepareStatement("INSERT INTO products (name, price) VALUES (?, ?)")) {
             connection.setAutoCommit(false);
             statement.setString(1, product.getName());
             statement.setInt(2, product.getPrice());
@@ -44,6 +46,8 @@ public class ProductMapper {
             e.printStackTrace();
             ConnectionService.rollback(connection);
             return false;
+        }finally {
+            ConnectionService.close(connection);
         }
     }
 
@@ -60,9 +64,10 @@ public class ProductMapper {
             ConnectionService.rollback(connection);
             e.printStackTrace();
             return false;
+        }finally {
+            ConnectionService.close(connection);
         }
     }
-
     public boolean delete(Product product) {
         try (PreparedStatement statement = connection.prepareStatement("DELETE FROM products WHERE id = ? ")) {
             connection.setAutoCommit(false);
@@ -74,7 +79,10 @@ public class ProductMapper {
             ConnectionService.rollback(connection);
             e.printStackTrace();
             return false;
-        } 
+        }finally {
+            ConnectionService.close(connection);
+        }
     }
-}
+    }
 
+}
